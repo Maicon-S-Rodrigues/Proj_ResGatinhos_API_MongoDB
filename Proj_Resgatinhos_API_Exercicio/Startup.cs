@@ -6,7 +6,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using Proj_Resgatinhos_API_Exercicio.Services;
+using Proj_Resgatinhos_API_Exercicio.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +31,11 @@ namespace Proj_Resgatinhos_API_Exercicio
         {
 
             services.AddControllers();
+            services.Configure<DataBaseSettings>(Configuration.GetSection(nameof(DataBaseSettings)));
+            services.AddSingleton<IDataBaseSettings>(sp => sp.GetRequiredService<IOptions<DataBaseSettings>>().Value);
+            services.AddSingleton<PetService>();
+            services.AddSingleton<PersonService>();
+            services.AddSingleton<AddressService>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Proj_Resgatinhos_API_Exercicio", Version = "v1" });
